@@ -30,7 +30,7 @@ class Simulacion:
         self.tile_size = config["tile_size"]
 
         self.ciudad = Ciudad(
-            config["grid_size"]
+            config
         )
 
 
@@ -45,6 +45,7 @@ class Simulacion:
         self.autos = []
 
         self.create_autos()
+    
 
     def create_autos(self):
         """ Creacion de autos con rutas predefinidas para testing"""
@@ -141,6 +142,6 @@ class Simulacion:
 
             pygame.display.flip()
 
-            self.clock.tick(60)
+            self.clock.tick(30)
 
         pygame.quit()

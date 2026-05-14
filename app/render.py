@@ -44,7 +44,93 @@ class Render:
             x * self.tile_size + self.offset_x,
             y * self.tile_size + self.offset_y
         )
+    def render_semaforos(self):
 
+        distancia = self.tile_size // 3
+
+        for row in self.city.intersecciones:
+
+            for interseccion in row:
+
+                if interseccion.semaforo is None:
+                    continue
+
+                semaforo = interseccion.semaforo
+
+                pos_x, pos_y = self.to_screen(
+                    interseccion.x,
+                    interseccion.y
+                )
+
+                # =========================
+                # COLOR
+                # =========================
+
+                color = Colores.VERDE
+
+                if semaforo.estado == "ROJO":
+
+                    color = Colores.ROJO
+
+                elif semaforo.estado == "AMARILLO":
+
+                    color = Colores.AMARILLO
+
+                # =========================
+                # POSICION FIJA
+                # =========================
+
+                orientacion = interseccion.orientacion
+
+                # =========================
+                # HORIZONTAL
+                # =========================
+
+                if orientacion == "HORIZONTAL":
+
+                    # FILA PAR -> DERECHA →
+
+                    if interseccion.y % 2 == 0:
+
+                        draw_x = pos_x + distancia
+
+                    # FILA IMPAR -> IZQUIERDA ←
+
+                    else:
+
+                        draw_x = pos_x - distancia
+
+                    draw_y = pos_y
+
+                # =========================
+                # VERTICAL
+                # =========================
+
+                else:
+
+                    # COLUMNA PAR -> ABAJO ↓
+
+                    if interseccion.x % 2 == 0:
+
+                        draw_y = pos_y + distancia
+
+                    # COLUMNA IMPAR -> ARRIBA ↑
+
+                    else:
+
+                        draw_y = pos_y - distancia
+
+                    draw_x = pos_x
+
+                pygame.draw.circle(
+                    self.screen,
+                    color,
+                    (
+                        draw_x,
+                        draw_y
+                    ),
+                    6
+                )
     def render_caminos(self):
 
         for camino in self.city.caminos:
@@ -139,7 +225,7 @@ class Render:
 
                 pygame.draw.circle(
                     self.screen,
-                    Colores.AMARILLO,
+                    Colores.BLANCO,
                     pos,
                     6
                 )
@@ -171,5 +257,6 @@ class Render:
         self.screen.fill(Colores.GRIS)
         self.render_caminos()
         self.render_intersecciones()
-        self.render_sentidos()  
+        self.render_sentidos() 
+        self.render_semaforos() 
         self.render_autos(autos)

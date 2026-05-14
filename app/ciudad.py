@@ -4,9 +4,13 @@ from models.interseccion import Interseccion
 
 class Ciudad:
 
-    def __init__(self, grid_size):
+    def __init__(
+        self,
+        config
+    ):
 
-        self.grid_size = grid_size
+        self.grid_size = config["grid_size"]
+        self.config = config
 
         self.intersecciones = []
         self.caminos = []
@@ -84,3 +88,34 @@ class Ciudad:
                         )
 
                         current.vecinos.append(up)
+        self.generar_semaforos()
+    
+    def generar_semaforos(self):
+
+        semaforos = [
+
+            (2, 2, "HORIZONTAL"),
+            (2, 5, "VERTICAL"),
+            (2, 8, "HORIZONTAL"),
+
+            (5, 2, "VERTICAL"),
+            (5, 5, "HORIZONTAL"),
+            (5, 8, "VERTICAL"),
+
+            (8, 2, "HORIZONTAL"),
+            (8, 5, "VERTICAL"),
+            (8, 8, "HORIZONTAL"),
+
+            (4, 4, "VERTICAL")
+        ]
+
+        for x, y, direccion in semaforos:
+
+            interseccion = self.intersecciones[y][x]
+
+            interseccion.agregar_semaforo(
+                direccion,
+                self.config["semaforo_verde"],
+                self.config["semaforo_amarillo"],
+                self.config["semaforo_rojo"]
+            )
